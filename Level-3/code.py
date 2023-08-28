@@ -45,6 +45,9 @@ class TaxPayer:
     def get_tax_form_attachment(self, path=None):
         tax_data = None
 
+        if not path:
+            raise Exception("Error: Tax form is required for all users")
+
         # builds path
         base_dir = os.path.dirname(os.path.abspath(__file__))
         tax_dir = os.path.normpath(os.path.join(base_dir, path))
@@ -52,11 +55,8 @@ class TaxPayer:
         if not tax_dir.startswith(base_dir):
             return None
 
-        if not path:
-            raise Exception("Error: Tax form is required for all users")
-
-        with open(path, 'rb') as form:
+        with open(tax_dir, 'rb') as form:
             tax_data = bytearray(form.read())
 
         # assume that tax data is returned on screen after this
-        return path
+        return tax_dir
