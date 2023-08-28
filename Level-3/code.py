@@ -1,5 +1,6 @@
 import os
 from flask import Flask, request  
+import pdb
 
 ### Unrelated to the exercise -- Starts here -- Please ignore
 app = Flask(__name__)
@@ -30,7 +31,10 @@ class TaxPayer:
         # builds path
         base_dir = os.path.dirname(os.path.abspath(__file__))
         prof_picture_path = os.path.normpath(os.path.join(base_dir, path))
-    
+
+        if not prof_picture_path.startswith(base_dir):
+            return None
+
         with open(prof_picture_path, 'rb') as pic:
             picture = bytearray(pic.read())
 
@@ -40,10 +44,17 @@ class TaxPayer:
     # returns the path of an attached tax form that every user should submit
     def get_tax_form_attachment(self, path=None):
         tax_data = None
-        
+
+        # builds path
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        tax_dir = os.path.normpath(os.path.join(base_dir, path))
+
+        if not tax_dir.startswith(base_dir):
+            return None
+
         if not path:
             raise Exception("Error: Tax form is required for all users")
-       
+
         with open(path, 'rb') as form:
             tax_data = bytearray(form.read())
 
